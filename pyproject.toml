@@ -1,0 +1,138 @@
+[project]
+name = "my-app"                          # Nome del progetto
+version = "0.1.0"                        # Versione dell'app
+description = "Un'app di esempio"        # Descrizione del progetto
+readme = "README.md"                     # File di documentazione
+requires-python = ">=3.9"                # Versione minima di Python richiesta
+key = "{{ SECRET_KEY }}"                    # Chiave segreta dell'app
+mode = "development"                     # Modalita applicazione development/production
+
+# Configurazione della messaggistica
+[amessage.log]
+adapter = "console"
+file = ""
+level = "debug"
+format = "%(asctime)s | %(levelname)-8s | %(process)d | %(message)s"
+
+[amessage.client]
+adapter = "websocket"
+url = "ws://localhost:8000/messenger"
+
+[amessage.server]
+adapter = "websocket"
+url = "wss://app.colosso.cloud/messenger"
+
+[amessage.chatbot]
+adapter = "api"
+domain = "assistant,chat"
+url = "https://openrouter.ai/api/v1/chat/completions"
+authorization = "Bearer"
+accept = "application/json"
+token = "{{ OPENROUTER_TOKEN }}"
+
+[amessage.producer]
+adapter = "api"
+domain = "backlog.producer,test"
+url = "https://openrouter.ai/api/v1/chat/completions"
+authorization = "Bearer"
+accept = "application/json"
+token = "{{ OPENROUTER_TOKEN }}"
+
+[amessage.programmer]
+adapter = "api"
+domain = "assistant,bom"
+url = "https://openrouter.ai/api/v1/chat/completions"
+authorization = "Bearer"
+accept = "application/json"
+token = "{{ OPENROUTER_TOKEN }}"
+
+[amessage.backend]
+adapter = "redis"
+host = "redis-18721.c339.eu-west-3-1.ec2.redns.redis-cloud.com"
+port = "18721"
+database = "Projects-free-db"
+username = "default"
+password = "{{ REDIS_PASSWORD }}"
+
+# Configurazione della presentazione
+[presentation.web]
+adapter = "starlette"
+host = "0.0.0.0"
+port = "5000"
+route = "web.xml"
+#ssl_keyfile = "key.pem"
+#ssl_certfile = "cert.pem"
+
+[apresentation.native]
+adapter = "flutter"
+route = "route.xml"
+
+# Configurazione dell'autenticazione
+[authorization.supabase]
+adapter = "verdict"
+
+# Configurazione dell'autenticazione
+[authentication.supabase]
+adapter = "supabase"
+url = "https://ljeowpqmovaavxghpsne.supabase.co"
+key = "{{ SUPABASE_KEY }}"
+persistence = "session"
+
+[aauthentication.github]
+adapter = "oauth"
+url = "https://github.com/login/oauth/access_token?client_id={{ GITHUB_OAUTH_ID }}&client_secret={{ GITHUB_OAUTH_SECRET }}"
+link = "https://github.com/login/oauth/authorize?client_id=Ov23lidpWleO0KCHQVm0&scope=repo,user&state=xyz987"
+id = "{{ GITHUB_OAUTH_ID }}"
+secret = "{{ GITHUB_OAUTH_SECRET }}"
+
+# Configurazione della persistenza
+[apersistence.bot]
+adapter = "jwt"
+url = "https://api.github.com"
+app_id = "{{ GITHUB_COLOSSO_ID }}"
+installation_id = "{{ GITHUB_COLOSSO_APP }}"
+key = "public/colosso-cloud.2024-11-24.private-key.pem"
+autologin = "true"
+
+[persistence.session]
+adapter = "redis"
+host = "redis-13589.c339.eu-west-3-1.ec2.cloud.redislabs.com"
+port = "13589"
+database = "database-MHZA09YW"
+username = "default"
+password = "{{ REDIS_PASSWORD }}"
+
+[persistence.supabase]
+adapter = "supabase"
+url = "https://ljeowpqmovaavxghpsne.supabase.co"
+key = "{{ SUPABASE_KEY }}"
+token = "{{ session_token_supabase or 'none' }}"
+refresh_token = "{{ session_token_supabase or 'none' }}"
+
+[apersistence.github]
+adapter = "api"
+url = "https://api.github.com"
+authorization = "Bearer "
+accept = "application/vnd.github+json"
+token = "{% if session.github and session.github.access_token %}{{ session.github.access_token }}{% else %}none{% endif %}"
+
+[apersistence.workspace]
+adapter = "fs"
+
+# Configurazione dell'automazione
+[aactuator.devops]
+adapter = "ansible"
+playbook_path = ""
+extra_vars = ""
+inventory_file = ""
+timeout = ""
+
+[aactuator.functions]
+adapter = "flow"
+url = "https://ljeowpqmovaavxghpsne.supabase.co/functions/v1/scrum-release"
+token = "{{ SUPABASE_SECRET }}"
+
+[aactuator.github]
+adapter = "flow"
+url = "https://ljeowpqmovaavxghpsne.supabase.co/functions/v1/scrum-release"
+token = "{{  session|get('github.access_token') }}"
